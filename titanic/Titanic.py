@@ -2,9 +2,6 @@
 import numpy as np
 import pandas as pd
 
-## visualization
-import seaborn as sns
-
 ## machine learning
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
