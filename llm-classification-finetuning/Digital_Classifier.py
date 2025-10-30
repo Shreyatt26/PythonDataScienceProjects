@@ -8,7 +8,7 @@ import numpy as np
 
 import tensorflow as tf
 from tensorflow.keras import layers, models
-import matplotlib as plt
+import matplotlib.pyplot as plt
+from keras.datasets import mnist
 
 ## load training data
-train = pd.read_csv("C:/Users/Shreya Tanguturi/Desktop/PythonPersonalProjects/llm-classification-finetuning/train.csv")
