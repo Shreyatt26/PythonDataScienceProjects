@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 ## visualization
-import matplotlib.pyplot as plt
 import seaborn as sns
 
 ## machine learning
