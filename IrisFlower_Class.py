@@ -26,7 +26,7 @@ df = X.copy()
 df["species"] = y
 #print(df.head())
 #df["species"].value_counts()
-
+ 
 ## Plots
 #sns.pairplot(df, hue="species", vars=X.columns)
 #plt.show()
