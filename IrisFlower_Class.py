@@ -20,9 +20,7 @@ from xgboost import XGBClassifier
 ## Load data
 iris = load_iris(as_frame=True)
 X = iris.data
-y = iris.target # 0=setosa, 1=versicolor, 2=virginica
-
-#print(iris)
+y = iris.target
 
 df = X.copy()
 df["species"] = y
