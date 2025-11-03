@@ -9,6 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, log_loss
+
 train = pd.read_csv("C:/Users/Shreya Tanguturi/Desktop/PythonPersonalProjects/llm-classification-finetuning/train.csv")
 test = pd.read_csv("C:/Users/Shreya Tanguturi/Desktop/PythonPersonalProjects/llm-classification-finetuning/test.csv")
 
@@ -27,7 +32,13 @@ test = pd.read_csv("C:/Users/Shreya Tanguturi/Desktop/PythonPersonalProjects/llm
 ## EDA
 sns.countplot(x=train["winner_model_b"], palette="viridis")
 plt.title("Class Distribution")
-plt.show()
+#plt.show()
+
+## inspect length of responses
+train["response_a_len"] = train["response_a"].apply(lambda x: len(x))
+train["response_b_len"] = train["response_b"].apply(lambda x: len(x))
+
+print(train[["response_a_len", "response_b_len"]].describe())
 
 ## create simple "text-pair" input
 def combine_text(row):
@@ -41,5 +52,19 @@ train["text"] = train.apply(combine_text, axis=1)
 test["text"] = test.apply(combine_text, axis=1)
 
 X = train["text"]
-y = train["winner_model"]   # target classes: 0,1,2 maybe?
+y = train["winner_model_a"]   # target classes: 0,1,2 maybe?
 
+## Convert Text --> TF-IDF (Term Frequency-Inverse Document Frequency) (Baseline NLP model)
+## numerical statistics that reflect how important a word is to a document in a collection. fundamental concept in information retrieval and text mining
+vectorizer = TfidfVectorizer(max_features=20000, stop_words="english")
+X_vec = vectorizer.fit_transform(X)
+X_test_vec = vectorizer.transform(test["text"])
+
+
+## Train a simple classifier --> Logistic Regression
+X_train, x_val, y_train, y_val = train_test_split(X_vec, y, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=20000, n_jobs=-1)
+model.fit(X_train, y_train)
+
+preds = model.predict_proba(X_val)
+print("Validation Log Loss: ", log_loss(y_val, preds))
